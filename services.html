@@ -1,0 +1,490 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services</title>
+
+<style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f2f2;
+}
+
+.container {
+    width: 95%;
+    margin: 30px auto;
+    background: #fff;
+    border: 2px solid #000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+}
+
+.logo img {
+    height: 50px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
+    margin: 0 15px;
+    font-size: 20px;
+    padding: 8px 15px;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    background: red;
+    color: white;
+}
+
+.menu a.active {
+    border: 2px solid #000;
+    padding: 8px 20px;
+    border-radius: 30px;
+    background: #eee;
+}
+
+h1 {
+    text-align: center;
+    color: red;
+    margin-top: 25px;
+}
+
+.content {
+    display: flex;
+    gap: 20px;
+}
+
+.info {
+    width: 40%;
+    color: red;
+    font-weight: bold;
+}
+
+.buttons button {
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 10px 20px;
+    border: 2px solid black;
+    background: white;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.buttons button:hover {
+    background: red;
+    color: white;
+    transform: scale(1.05);
+}
+
+.map {
+    width: 60%;
+}
+
+.map iframe {
+    border: 0;
+    border-radius: 10px;
+}
+
+.toggle-section {
+    display: none;
+    margin-top: 20px;
+}
+
+select,
+input[type="date"],
+input[type="time"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 30px;
+    border: 2px solid black;
+    font-weight: bold;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.book-btn {
+    padding: 12px 30px;
+    border-radius: 30px;
+    border: 2px solid black;
+    background: #eee;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.book-btn:hover {
+    background: red;
+    color: white;
+    transform: scale(1.05);
+}
+
+.booking-records {
+    margin-top: 30px;
+    border-top: 2px solid black;
+    padding-top: 15px;
+}
+
+.booking-records h2 {
+    color: red;
+}
+
+.booking-item {
+    border: 1px solid black;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    color: black;
+}
+
+.booking-item button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: 0.3s;
+}
+
+.booking-item button:hover {
+    background: darkred;
+    transform: scale(1.05);
+}
+
+@media (max-width: 700px) {
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .menu a {
+        font-size: 14px;
+        margin: 0 3px;
+    }
+
+    .content {
+        flex-direction: column;
+    }
+
+    .info, .map {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+
+        <div class="logo">
+            <img src="logo 1.jpg" alt="Dragonbikes">
+        </div>
+
+        <div class="menu">
+            <a href="dashboard.html">HOME</a>
+            <a href="products.html">PRODUCT</a>
+            <a href="services.html" class="active">SERVICES</a>
+            <a href="inventory.html">INVENTORY</a>
+        </div>
+
+    </div>
+
+    <h1>DRAGON BIKES SERVICE CENTERS</h1>
+
+    <div class="content">
+
+        <div class="info" id="storeInfo">
+
+            <p>214 CM Recto cor. Delpan</p>
+            <p>St. 1006 Binondo, Philippines</p>
+
+            <div class="buttons">
+                <button id="inquireBtn">INQUIRE</button>
+                <button id="locationBtn">LOCATION</button>
+            </div>
+
+            <div id="inquireSection" class="toggle-section">
+
+                <h2>BOOK A SERVICE</h2>
+
+                <label>CHOOSE SERVICE TYPE</label>
+                <br><br>
+
+                <select id="serviceType">
+                    <option value="Oil Change">OIL CHANGE</option>
+                    <option value="Tune Up">TUNE UP</option>
+                    <option value="PMS">PMS</option>
+                </select>
+
+                <label>SELECT DATE</label>
+                <br><br>
+
+                <input type="date" id="serviceDate" required>
+
+                <label>SELECT TIME</label>
+                <br><br>
+
+                <input
+                    type="time"
+                    id="serviceTime"
+                    min="08:00"
+                    max="17:00"
+                    required
+                >
+
+                <p style="color:black; font-size:13px;">
+                    Available appointment hours: 8:00 AM – 5:00 PM
+                </p>
+
+                <p style="color:black; font-size:13px;">
+                    Maximum of 2 bookings per selected date and time.
+                </p>
+
+                <button class="book-btn" onclick="bookService()">
+                    BOOK SERVICE
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="map toggle-section" id="locationSection">
+
+            <iframe
+                src="https://www.google.com/maps?q=Binondo,Manila&output=embed"
+                width="100%"
+                height="300"
+                allowfullscreen
+                loading="lazy">
+            </iframe>
+
+        </div>
+
+    </div>
+
+    <div class="booking-records">
+
+        <h2>BOOKING RECORDS</h2>
+
+        <div id="bookingList"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+const inquireBtn = document.getElementById("inquireBtn");
+const locationBtn = document.getElementById("locationBtn");
+
+const inquireSection = document.getElementById("inquireSection");
+const locationSection = document.getElementById("locationSection");
+
+inquireBtn.addEventListener("click", function() {
+    inquireSection.style.display = "block";
+    locationSection.style.display = "none";
+});
+
+locationBtn.addEventListener("click", function() {
+    locationSection.style.display = "block";
+    inquireSection.style.display = "none";
+});
+
+const serviceDateInput = document.getElementById("serviceDate");
+
+function getLocalToday() {
+    const today = new Date();
+
+    return today.getFullYear() + "-" +
+        String(today.getMonth() + 1).padStart(2, "0") + "-" +
+        String(today.getDate()).padStart(2, "0");
+}
+
+serviceDateInput.min = getLocalToday();
+
+function bookService() {
+
+    const service = document.getElementById("serviceType").value;
+    const date = document.getElementById("serviceDate").value;
+    const time = document.getElementById("serviceTime").value;
+
+    if (!date) {
+        alert("Please select a date.");
+        return;
+    }
+
+    if (!time) {
+        alert("Please select an appointment time.");
+        return;
+    }
+
+    const selectedDate = new Date(date + "T00:00:00");
+
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < currentDate) {
+        alert("Please select today or a future date.");
+        return;
+    }
+
+    if (time < "08:00" || time > "17:00") {
+        alert("Please select a time between 8:00 AM and 5:00 PM.");
+        return;
+    }
+
+    let bookings = JSON.parse(
+        localStorage.getItem("serviceBookings")
+    ) || [];
+
+    const bookingCount = bookings.filter(booking => {
+        return booking.date === date && booking.time === time;
+    }).length;
+
+    if (bookingCount >= 2) {
+        alert(
+            "SORRY! THIS TIME SLOT IS FULL.\n\n" +
+            "Maximum of 2 bookings are allowed per selected time.\n" +
+            "Please select another time."
+        );
+        return;
+    }
+
+    const booking = {
+        id: Date.now(),
+        service: service,
+        date: date,
+        time: time,
+        store: "Dragonbikes Inc.",
+        location: "214 CM Recto cor. Delpan St. 1006 Binondo, Philippines"
+    };
+
+    bookings.push(booking);
+
+    localStorage.setItem(
+        "serviceBookings",
+        JSON.stringify(bookings)
+    );
+
+    const remainingSlots = 1 - bookingCount;
+
+    alert(
+        "BOOKING RESERVED!\n\n" +
+        "Service: " + service + "\n" +
+        "Date: " + date + "\n" +
+        "Time: " + formatTime(time) + "\n\n" +
+        "Remaining slots: " + remainingSlots
+    );
+
+    document.getElementById("serviceDate").value = "";
+    document.getElementById("serviceTime").value = "";
+
+    displayBookings();
+}
+
+function formatTime(time) {
+
+    const [hours, minutes] = time.split(":");
+    const date = new Date();
+
+    date.setHours(Number(hours), Number(minutes));
+
+    return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+    });
+}
+
+function displayBookings() {
+
+    const bookingList = document.getElementById("bookingList");
+
+    const bookings = JSON.parse(
+        localStorage.getItem("serviceBookings")
+    ) || [];
+
+    bookingList.innerHTML = "";
+
+    if (bookings.length === 0) {
+        bookingList.innerHTML = "<p>No bookings yet.</p>";
+        return;
+    }
+
+    bookings.forEach(booking => {
+
+        const item = document.createElement("div");
+        item.className = "booking-item";
+
+        const details = document.createElement("p");
+
+        details.textContent =
+            "Service: " + booking.service +
+            " | Date: " + booking.date +
+            " | Time: " + (booking.time ? formatTime(booking.time) : "Not specified") +
+            " | Store: " + booking.store;
+
+        const cancelButton = document.createElement("button");
+
+        cancelButton.textContent = "CANCEL BOOKING";
+
+        cancelButton.onclick = function() {
+            cancelBooking(booking.id);
+        };
+
+        item.appendChild(details);
+        item.appendChild(cancelButton);
+
+        bookingList.appendChild(item);
+
+    });
+}
+
+function cancelBooking(id) {
+
+    if (!confirm("Are you sure you want to cancel this booking?")) {
+        return;
+    }
+
+    let bookings = JSON.parse(
+        localStorage.getItem("serviceBookings")
+    ) || [];
+
+    bookings = bookings.filter(booking => booking.id !== id);
+
+    localStorage.setItem(
+        "serviceBookings",
+        JSON.stringify(bookings)
+    );
+
+    displayBookings();
+
+    alert("Booking cancelled successfully!");
+}
+
+displayBookings();
+
+</script>
+
+</body>
+</html>

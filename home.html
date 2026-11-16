@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragonbikes - Login Portal</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    width: 700px;
+    max-width: 100%;
+    margin: 60px auto;
+    background: white;
+    border: 2px solid black;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.header {
+    border-bottom: 2px solid black;
+    padding-bottom: 15px;
+}
+
+.logo img {
+    height: 50px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+h1 {
+    text-align: center;
+    color: red;
+    margin: 30px 0;
+}
+
+.login-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.tab-button {
+    padding: 12px 35px;
+    border: 2px solid black;
+    border-radius: 25px;
+    background: #ddd;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tab-button.active,
+.tab-button:hover {
+    background: red;
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+label {
+    display: block;
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+input {
+    width: 80%;
+    padding: 12px;
+    border-radius: 25px;
+    border: 2px solid black;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input:hover {
+    border-color: red;
+    box-shadow: 0 0 10px rgba(255,0,0,0.30);
+    transform: scale(1.02);
+}
+
+input:focus {
+    outline: none;
+    border-color: red;
+    box-shadow: 0 0 12px rgba(255,0,0,0.40);
+    transform: scale(1.02);
+}
+
+.password-wrapper {
+    position: relative;
+    width: 80%;
+    margin: auto;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 75px;
+}
+
+.password-wrapper:hover input {
+    border-color: red;
+    box-shadow: 0 0 10px rgba(255,0,0,0.30);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #b5121b;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-login {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 45px;
+    border-radius: 25px;
+    border: 2px solid black;
+    background: #ddd;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-login:hover:not(:disabled) {
+    background: red;
+    color: white;
+    transform: scale(1.05);
+}
+
+.btn-login:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: #c00000;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.success-message {
+    color: green;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.lock-message {
+    color: #c00000;
+    background: #ffe5e5;
+    border: 1px solid #c00000;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.countdown {
+    display: block;
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+.security-note {
+    color: #777;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 25px;
+}
+
+@media(max-width: 600px) {
+    .container {
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    input,
+    .password-wrapper {
+        width: 100%;
+    }
+
+    .tab-button {
+        padding: 10px 25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">
+            <img src="logo 1.jpg" alt="Dragonbikes Logo">
+        </div>
+    </div>
+
+    <h1>DRAGONBIKES LOGIN</h1>
+
+    <div class="login-tabs">
+
+        <button type="button"
+                class="tab-button active"
+                id="adminTab"
+                onclick="switchLogin('admin')">
+            ADMIN
+        </button>
+
+        <button type="button"
+                class="tab-button"
+                id="buyerTab"
+                onclick="switchLogin('buyer')">
+            BUYER
+        </button>
+
+    </div>
+
+    <h2 id="loginTitle" style="text-align:center;color:red;">
+        ADMIN LOGIN
+    </h2>
+
+    <form id="loginForm">
+
+        <div class="form-group">
+            <label for="username">USERNAME</label>
+            <input
+                type="text"
+                id="username"
+                autocomplete="username"
+                maxlength="100"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="password">PASSWORD</label>
+
+            <div class="password-wrapper">
+                <input
+                    type="password"
+                    id="password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="toggle-password"
+                    id="togglePassword">
+                    SHOW
+                </button>
+            </div>
+        </div>
+
+        <button
+            class="btn-login"
+            id="loginButton"
+            type="submit">
+            LOGIN AS ADMIN
+        </button>
+
+        <p id="loginMessage" role="alert" aria-live="polite"></p>
+
+        <div id="lockMessage" class="lock-message" hidden>
+            TOO MANY INCORRECT ADMIN LOGIN ATTEMPTS!
+            <span id="countdown" class="countdown"></span>
+        </div>
+
+    </form>
+
+    <p class="security-note">
+        Authorized users only.
+    </p>
+
+</div>
+
+<script>
+
+const ADMIN_USERNAME = "sel051203";
+const ADMIN_PASSWORD = "lagusnilad";
+
+const BUYER_USERNAME = "buyer";
+const BUYER_PASSWORD = "buyer";
+
+const DASHBOARD_PAGE = "dashboard.html";
+
+const FIRST_LOCK_DURATION = 5 * 60 * 1000;
+const SECOND_LOCK_DURATION = 24 * 60 * 60 * 1000;
+
+const MAX_ATTEMPTS = 3;
+const STORAGE_KEY = "dragonbikes_admin_login_security";
+
+let loginMode = "admin";
+
+const loginForm = document.getElementById("loginForm");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const loginButton = document.getElementById("loginButton");
+const loginMessage = document.getElementById("loginMessage");
+const lockMessage = document.getElementById("lockMessage");
+const countdown = document.getElementById("countdown");
+const togglePassword = document.getElementById("togglePassword");
+
+const adminTab = document.getElementById("adminTab");
+const buyerTab = document.getElementById("buyerTab");
+const loginTitle = document.getElementById("loginTitle");
+
+function switchLogin(mode) {
+
+    loginMode = mode;
+
+    usernameInput.value = "";
+    passwordInput.value = "";
+
+    loginMessage.textContent = "";
+    loginMessage.className = "";
+
+    if (mode === "admin") {
+
+        adminTab.classList.add("active");
+        buyerTab.classList.remove("active");
+
+        loginTitle.textContent = "ADMIN LOGIN";
+        loginButton.textContent = "LOGIN AS ADMIN";
+
+        checkAdminLock();
+
+    } else {
+
+        buyerTab.classList.add("active");
+        adminTab.classList.remove("active");
+
+        loginTitle.textContent = "BUYER LOGIN";
+        loginButton.textContent = "LOGIN AS BUYER";
+
+        usernameInput.disabled = false;
+        passwordInput.disabled = false;
+        loginButton.disabled = false;
+
+        lockMessage.hidden = true;
+    }
+}
+
+togglePassword.addEventListener("click", function() {
+
+    const isPassword = passwordInput.type === "password";
+
+    passwordInput.type = isPassword ? "text" : "password";
+
+    togglePassword.textContent = isPassword ? "HIDE" : "SHOW";
+
+});
+
+function getLoginData() {
+
+    try {
+
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (!saved) {
+            return {
+                attempts: 0,
+                lockUntil: 0,
+                hasHadFirstLock: false
+            };
+        }
+
+        const data = JSON.parse(saved);
+
+        return {
+            attempts: Number.isInteger(data.attempts) ? data.attempts : 0,
+            lockUntil: Number.isFinite(data.lockUntil) ? data.lockUntil : 0,
+            hasHadFirstLock: data.hasHadFirstLock === true
+        };
+
+    } catch (error) {
+
+        return {
+            attempts: 0,
+            lockUntil: 0,
+            hasHadFirstLock: false
+        };
+
+    }
+}
+
+function saveLoginData(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function formatTime(milliseconds) {
+
+    const totalSeconds = Math.ceil(milliseconds / 1000);
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return (
+        String(hours).padStart(2, "0") + ":" +
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0")
+    );
+}
+
+function checkAdminLock() {
+
+    const data = getLoginData();
+    const remaining = data.lockUntil - Date.now();
+
+    if (remaining > 0 && loginMode === "admin") {
+
+        loginButton.disabled = true;
+        usernameInput.disabled = true;
+        passwordInput.disabled = true;
+
+        lockMessage.hidden = false;
+        countdown.textContent = formatTime(remaining);
+
+        return true;
+    }
+
+    if (data.lockUntil > 0 && remaining <= 0) {
+
+        if (data.hasHadFirstLock) {
+            data.lockUntil = 0;
+            data.attempts = 3;
+        } else {
+            data.lockUntil = 0;
+            data.attempts = 0;
+        }
+
+        saveLoginData(data);
+    }
+
+    if (loginMode === "admin") {
+
+        loginButton.disabled = false;
+        usernameInput.disabled = false;
+        passwordInput.disabled = false;
+
+        lockMessage.hidden = true;
+    }
+
+    return false;
+}
+
+function applyAdminPenalty() {
+
+    const data = getLoginData();
+
+    data.attempts++;
+
+    if (!data.hasHadFirstLock && data.attempts >= MAX_ATTEMPTS) {
+
+        data.hasHadFirstLock = true;
+        data.lockUntil = Date.now() + FIRST_LOCK_DURATION;
+
+        loginMessage.textContent =
+            "3 incorrect attempts! Login blocked for 5 minutes.";
+
+    } else if (data.hasHadFirstLock) {
+
+        data.lockUntil = Date.now() + SECOND_LOCK_DURATION;
+
+        loginMessage.textContent =
+            "Repeated incorrect attempts! Login blocked for 24 hours.";
+
+    } else {
+
+        loginMessage.textContent =
+            "Invalid username or password. Attempt " +
+            data.attempts + " of 3.";
+    }
+
+    loginMessage.className = "error-message";
+
+    saveLoginData(data);
+
+    checkAdminLock();
+}
+
+loginForm.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (loginMode === "admin") {
+
+        if (checkAdminLock()) {
+            return;
+        }
+
+        if (
+            username === ADMIN_USERNAME &&
+            password === ADMIN_PASSWORD
+        ) {
+
+            saveLoginData({
+                attempts: 0,
+                lockUntil: 0,
+                hasHadFirstLock: false
+            });
+
+            sessionStorage.setItem("dragonbikesRole", "admin");
+
+            loginMessage.textContent = "Admin login successful!";
+            loginMessage.className = "success-message";
+
+            loginButton.disabled = true;
+            loginButton.textContent = "REDIRECTING...";
+
+            window.location.href = DASHBOARD_PAGE;
+
+        } else {
+
+            passwordInput.value = "";
+            applyAdminPenalty();
+        }
+    }
+
+    else if (loginMode === "buyer") {
+
+        if (
+            username === BUYER_USERNAME &&
+            password === BUYER_PASSWORD
+        ) {
+
+            sessionStorage.setItem("dragonbikesRole", "buyer");
+
+            loginMessage.textContent = "Buyer login successful!";
+            loginMessage.className = "success-message";
+
+            loginButton.disabled = true;
+            loginButton.textContent = "REDIRECTING...";
+
+            window.location.href = DASHBOARD_PAGE;
+
+        } else {
+
+            passwordInput.value = "";
+
+            loginMessage.textContent =
+                "Invalid buyer username or password.";
+
+            loginMessage.className = "error-message";
+        }
+    }
+
+});
+
+setInterval(function() {
+
+    if (loginMode === "admin") {
+        checkAdminLock();
+    }
+
+}, 1000);
+
+checkAdminLock();
+
+</script>
+
+</body>
+</html>

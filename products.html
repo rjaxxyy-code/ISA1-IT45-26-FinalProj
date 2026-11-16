@@ -1,0 +1,1352 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragonbikes Inc. - Products</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f2f2;
+    margin: 20px;
+}
+
+.container {
+    width: 95%;
+    margin: auto;
+    background: white;
+    border: 2px solid black;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid black;
+    padding-bottom: 15px;
+}
+
+.logo {
+    font-weight: bold;
+    color: red;
+    font-size: 20px;
+}
+
+.nav {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nav a {
+    font-weight: bold;
+    color: red;
+    font-size: 17px;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.nav a:hover {
+    background: red;
+    color: white;
+    transform: scale(1.05);
+}
+
+.nav .active {
+    background: #ddd;
+    border: 2px solid black;
+}
+
+.title {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    font-size: 25px;
+    margin: 30px 0;
+}
+
+.search-box {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.search-box input {
+    width: 300px;
+    padding: 12px;
+    border-radius: 25px;
+    border: 2px solid black;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.search-box input:hover {
+    border-color: red;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.25);
+    transform: scale(1.02);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: red;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.35);
+}
+
+.search-box button {
+    padding: 12px 20px;
+    border-radius: 25px;
+    border: none;
+    font-weight: bold;
+    color: white;
+    background: red;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: all 0.3s ease;
+}
+
+.search-box button:hover {
+    background: darkred;
+    transform: scale(1.08);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+}
+
+.search-box button:active {
+    transform: scale(0.95);
+}
+
+.product-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.product-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 18%;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 8px rgba(0,0,0,.08);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 7px 15px rgba(0,0,0,.18);
+}
+
+.product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+}
+
+.product-card p {
+    font-weight: bold;
+}
+
+.add-to-cart-btn {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+    background: darkred;
+    transform: scale(1.08);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+}
+
+.add-to-cart-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.add-to-cart-btn:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+.cart-notification {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    background: #222;
+    color: white;
+    padding: 15px 22px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 2000;
+    opacity: 0;
+    transform: translateY(-15px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.cart-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.cart-notification.success {
+    border-left: 5px solid #28a745;
+}
+
+.cart-notification.error {
+    border-left: 5px solid #dc3545;
+}
+
+.checkout {
+    text-align: right;
+    margin-top: 30px;
+}
+
+.checkout button {
+    padding: 14px 30px;
+    font-weight: bold;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.checkout button:hover {
+    background: darkred;
+    transform: scale(1.05);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+}
+
+.checkout button:active {
+    transform: scale(0.95);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 15px;
+}
+
+.modal-content {
+    background: white;
+    width: 550px;
+    max-width: 100%;
+    padding: 25px;
+    border-radius: 15px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.payment-heading {
+    color: #b5121b;
+    text-align: center;
+    font-size: 25px;
+}
+
+.muted {
+    text-align: center;
+    color: #777;
+}
+
+.payment-summary {
+    background: #fff5f5;
+    border: 1px solid #efcccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.payment-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 0;
+}
+
+.payment-total {
+    border-top: 2px solid #ddd;
+    margin-top: 10px;
+    padding-top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.payment-field {
+    margin: 15px 0;
+}
+
+.payment-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.payment-field input,
+.payment-field select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.payment-info {
+    background: #fff5f5;
+    border: 1px solid #efcccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 12px;
+    line-height: 1.7;
+}
+
+.payment-info strong {
+    color: #b5121b;
+}
+
+.payment-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.primary-pay,
+.secondary-pay {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-pay {
+    background: #b5121b;
+    color: white;
+}
+
+.secondary-pay {
+    background: #eee;
+    color: #333;
+}
+
+.primary-pay:hover {
+    background: darkred;
+    transform: scale(1.05);
+}
+
+.secondary-pay:hover {
+    background: #ccc;
+    transform: scale(1.05);
+}
+
+#paymentError {
+    color: red;
+    font-size: 14px;
+}
+
+.receipt-paper {
+    background: white;
+    color: #222;
+    max-width: 480px;
+    margin: auto;
+    padding: 25px;
+    border: 1px dashed #999;
+}
+
+.receipt-brand {
+    text-align: center;
+    border-bottom: 1px dashed #999;
+    padding-bottom: 15px;
+}
+
+.receipt-brand h2 {
+    color: red;
+    margin-bottom: 5px;
+}
+
+.receipt-meta {
+    font-size: 13px;
+    line-height: 1.8;
+    margin: 15px 0;
+}
+
+.receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.receipt-table th,
+.receipt-table td {
+    padding: 10px 4px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.receipt-table th:last-child,
+.receipt-table td:last-child {
+    text-align: right;
+}
+
+.receipt-totals {
+    margin-top: 15px;
+    border-top: 1px dashed #999;
+    padding-top: 10px;
+}
+
+.receipt-thanks {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 13px;
+    color: #555;
+}
+
+@media(max-width: 700px) {
+    body {
+        margin: 8px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 12px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav {
+        justify-content: center;
+    }
+
+    .product-card {
+        width: 45%;
+    }
+
+    .search-box input {
+        width: 60%;
+    }
+}
+
+@media(max-width: 450px) {
+    .product-card {
+        width: 100%;
+    }
+
+    .search-box input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .search-box button {
+        margin: 5px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="cartNotification" class="cart-notification"></div>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">DRAGONBIKES INC.</div>
+
+        <div class="nav">
+            <a href="dashboard.html">HOME</a>
+            <a href="products.html" class="active">PRODUCT</a>
+            <a href="services.html">SERVICES</a>
+            <a href="inventory.html">INVENTORY</a>
+        </div>
+    </div>
+
+    <div class="title">WHAT ARE YOU LOOKING FOR?</div>
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search products..."
+            onkeydown="if(event.key === 'Enter') searchProduct()"
+        >
+
+        <button onclick="searchProduct()">SEARCH</button>
+        <button onclick="showAllProducts()">SHOW ALL</button>
+
+    </div>
+
+    <div class="product-list" id="productList"></div>
+
+    <div class="checkout">
+        <button onclick="checkoutCart()">
+            CHECKOUT (<span id="cartCount">0</span>)
+        </button>
+    </div>
+
+</div>
+
+<div class="modal" id="paymentModal">
+
+    <div class="modal-content">
+
+        <h2 class="payment-heading">SECURE CHECKOUT</h2>
+
+        <p class="muted">
+            Review your order before confirming payment.
+        </p>
+
+        <div id="paymentOrder" class="payment-summary"></div>
+
+        <div class="payment-field">
+
+            <label>Payment Method</label>
+
+            <select id="paymentMethod">
+                <option value="Cash">Cash</option>
+                <option value="GCash">GCash</option>
+                <option value="Maya">Maya</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+            </select>
+
+        </div>
+
+        <div id="ewalletDetails" class="payment-info" style="display:none;">
+
+            <strong id="ewalletName"></strong>
+
+            <br>
+
+            Recipient Name:
+            <strong>Russelle Jan M. Young</strong>
+
+            <br>
+
+            Recipient Number:
+            <strong>09152425919</strong>
+
+        </div>
+
+        <div id="bankDetails" style="display:none;">
+
+            <div class="payment-field">
+
+                <label>Select Bank</label>
+
+                <select id="bankName">
+                    <option value="">-- Select Bank --</option>
+                    <option value="BPI">BPI</option>
+                    <option value="LandBank">LandBank</option>
+                    <option value="UnionBank">UnionBank</option>
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="payment-field" id="cashReceivedField">
+
+            <label>Cash Received (₱)</label>
+
+            <input
+                type="number"
+                id="cashReceived"
+                min="0"
+                step="0.01"
+                placeholder="Enter amount received"
+            >
+
+        </div>
+
+        <div id="paymentChange" class="payment-line">
+
+            <span>Change</span>
+            <strong>₱0.00</strong>
+
+        </div>
+
+        <p id="paymentError" role="alert"></p>
+
+        <div class="payment-actions">
+
+            <button class="secondary-pay" onclick="closePayment()">
+                CANCEL
+            </button>
+
+            <button class="primary-pay" onclick="completePayment()">
+                CONFIRM PAYMENT
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal" id="receiptModal">
+
+    <div class="modal-content">
+
+        <div id="receiptContent"></div>
+
+        <div class="payment-actions receipt-actions">
+
+            <button class="secondary-pay" onclick="closeReceipt()">
+                CLOSE
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let motorcycleProducts =
+JSON.parse(localStorage.getItem("motorcycleInventory")) || [
+
+    {name:"Honda Click 160", img:"prod1.jpg", price:50000, stock:5},
+    {name:"Honda Giorno", img:"prod2.jpg", price:65000, stock:4},
+    {name:"Honda Mio i 125", img:"prod3.jpg", price:72000, stock:3},
+    {name:"PCX 160 Roadsync", img:"prod4.jpg", price:58000, stock:2},
+    {name:"Kymco 400", img:"prod5.jpg", price:90000, stock:1}
+
+];
+
+let sparePartsProducts =
+JSON.parse(localStorage.getItem("spareInventory")) || [
+
+    {name:"Side mirrors", img:"spare1.jpg", price:5000, stock:10},
+    {name:"Air Filter", img:"spare2.jpg", price:5500, stock:8},
+    {name:"Motorcycle Wheels", img:"spare3.jpg", price:6000, stock:6},
+    {name:"Seat Cover", img:"spare4.jpg", price:6500, stock:5},
+    {name:"Motorcycle synthetic oil", img:"spare5.jpg", price:7000, stock:4}
+
+];
+
+const motorcycleNameUpdates = {
+    "Motorcycle 1": "Honda Click 160",
+    "Motorcycle 2": "Honda Giorno",
+    "Motorcycle 3": "Honda Mio i 125",
+    "Motorcycle 4": "PCX 160 Roadsync",
+    "Motorcycle 5": "Kymco 400"
+};
+
+motorcycleProducts.forEach(product => {
+    if (motorcycleNameUpdates[product.name]) {
+        product.name = motorcycleNameUpdates[product.name];
+    }
+});
+
+const sparePartNameUpdates = {
+    "Spare Part 1": "Side mirrors",
+    "Spare Part 2": "Air Filter",
+    "Spare Part 3": "Motorcycle Wheels",
+    "Spare Part 4": "Seat Cover",
+    "Spare Part 5": "Motorcycle synthetic oil"
+};
+
+sparePartsProducts.forEach(product => {
+    if (sparePartNameUpdates[product.name]) {
+        product.name = sparePartNameUpdates[product.name];
+    }
+});
+
+let cart = [];
+
+function saveInventory() {
+
+    localStorage.setItem(
+        "motorcycleInventory",
+        JSON.stringify(motorcycleProducts)
+    );
+
+    localStorage.setItem(
+        "spareInventory",
+        JSON.stringify(sparePartsProducts)
+    );
+
+}
+
+function formatPeso(amount) {
+
+    return "₱" + Number(amount).toLocaleString("en-PH", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+
+}
+
+function getCartQuantity(product) {
+
+    return cart.filter(item =>
+        item.productRef === product
+    ).length;
+
+}
+
+let notificationTimeout;
+
+function showCartNotification(message, type = "success") {
+
+    const notification =
+        document.getElementById("cartNotification");
+
+    notification.textContent = message;
+    notification.className = "cart-notification " + type;
+
+    requestAnimationFrame(() => {
+        notification.classList.add("show");
+    });
+
+    clearTimeout(notificationTimeout);
+
+    notificationTimeout = setTimeout(() => {
+        notification.classList.remove("show");
+    }, 3000);
+
+}
+
+function updateDisplay(products) {
+
+    const productList = document.getElementById("productList");
+
+    productList.innerHTML = "";
+
+    if (products.length === 0) {
+        productList.innerHTML = "<h3>No products found.</h3>";
+        return;
+    }
+
+    products.forEach(product => {
+
+        const availableStock =
+            Number(product.stock) - getCartQuantity(product);
+
+        const card = document.createElement("div");
+
+        card.className = "product-card";
+
+        card.innerHTML = `
+
+            <img src="${product.img}" alt="${product.name}">
+
+            <p>${product.name}</p>
+
+            <p>Stock: ${availableStock}</p>
+
+            <p>${formatPeso(product.price)}</p>
+
+            <button
+                class="add-to-cart-btn"
+                ${availableStock <= 0 ? "disabled" : ""}
+            >
+                ${availableStock <= 0 ? "All in Cart" : "Add to Cart"}
+            </button>
+
+        `;
+
+        card.querySelector("button").onclick = function() {
+            addToCart(product);
+        };
+
+        productList.appendChild(card);
+
+    });
+
+}
+
+function searchProduct() {
+
+    const value = document.getElementById("searchInput")
+        .value.toLowerCase().trim();
+
+    if (!value) {
+        showAllProducts();
+        return;
+    }
+
+    const allProducts = [
+        ...motorcycleProducts,
+        ...sparePartsProducts
+    ];
+
+    const filteredProducts = allProducts.filter(product =>
+        product.name.toLowerCase().includes(value)
+    );
+
+    updateDisplay(filteredProducts);
+
+}
+
+function showAllProducts() {
+
+    document.getElementById("searchInput").value = "";
+
+    const allProducts = [
+        ...motorcycleProducts,
+        ...sparePartsProducts
+    ];
+
+    updateDisplay(allProducts);
+
+}
+
+function addToCart(product) {
+
+    if (getCartQuantity(product) >= Number(product.stock)) {
+
+        showCartNotification(
+            "No more available stock for " + product.name,
+            "error"
+        );
+
+        return;
+    }
+
+    cart.push({
+        name: product.name,
+        img: product.img,
+        price: Number(product.price),
+        productRef: product
+    });
+
+    updateCartCount();
+
+    showCartNotification(
+        product.name + " added to cart!",
+        "success"
+    );
+
+    showAllProducts();
+
+}
+
+function updateCartCount() {
+
+    document.getElementById("cartCount").innerText = cart.length;
+
+}
+
+function getCartSummary() {
+
+    const grouped = [];
+
+    cart.forEach(item => {
+
+        let row = grouped.find(entry =>
+            entry.productRef === item.productRef
+        );
+
+        if (!row) {
+
+            row = {
+                name: item.name,
+                img: item.img,
+                price: item.price,
+                quantity: 0,
+                productRef: item.productRef
+            };
+
+            grouped.push(row);
+
+        }
+
+        row.quantity++;
+
+    });
+
+    return grouped;
+
+}
+
+function checkoutCart() {
+
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    const summary = getCartSummary();
+
+    const total = cart.reduce((sum, item) =>
+        sum + item.price, 0
+    );
+
+    document.getElementById("paymentOrder").innerHTML =
+
+        summary.map(item => `
+
+            <div class="payment-line">
+
+                <span>
+                    ${item.name} × ${item.quantity}
+                </span>
+
+                <strong>
+                    ${formatPeso(item.price * item.quantity)}
+                </strong>
+
+            </div>
+
+        `).join("") +
+
+        `
+
+            <div class="payment-line payment-total">
+
+                <span>TOTAL AMOUNT</span>
+
+                <strong>${formatPeso(total)}</strong>
+
+            </div>
+
+        `;
+
+    document.getElementById("paymentModal").style.display = "flex";
+
+    document.getElementById("paymentError").textContent = "";
+
+    document.getElementById("cashReceived").value = "";
+
+    document.getElementById("paymentMethod").value = "Cash";
+
+    document.getElementById("bankName").value = "";
+
+    updatePaymentMethodFields();
+
+}
+
+function updatePaymentMethodFields() {
+
+    const method =
+        document.getElementById("paymentMethod").value;
+
+    const cashField =
+        document.getElementById("cashReceivedField");
+
+    const changeField =
+        document.getElementById("paymentChange");
+
+    const ewalletDetails =
+        document.getElementById("ewalletDetails");
+
+    const ewalletName =
+        document.getElementById("ewalletName");
+
+    const bankDetails =
+        document.getElementById("bankDetails");
+
+    cashField.style.display =
+        method === "Cash" ? "block" : "none";
+
+    changeField.style.display =
+        method === "Cash" ? "flex" : "none";
+
+    ewalletDetails.style.display = "none";
+
+    bankDetails.style.display = "none";
+
+    if (method === "GCash" || method === "Maya") {
+
+        ewalletDetails.style.display = "block";
+
+        ewalletName.textContent =
+            method + " Payment Details";
+
+    }
+
+    if (method === "Bank Transfer") {
+
+        bankDetails.style.display = "block";
+
+    }
+
+    document.getElementById("paymentError").textContent = "";
+
+}
+
+document.getElementById("paymentMethod")
+    .addEventListener("change", updatePaymentMethodFields);
+
+document.getElementById("cashReceived")
+    .addEventListener("input", function() {
+
+        const total = cart.reduce((sum, item) =>
+            sum + item.price, 0
+        );
+
+        const received = Number(this.value) || 0;
+
+        const change = Math.max(0, received - total);
+
+        document.getElementById("paymentChange").innerHTML = `
+
+            <span>Change</span>
+
+            <strong>${formatPeso(change)}</strong>
+
+        `;
+
+    });
+
+function completePayment() {
+
+    if (cart.length === 0) return;
+
+    const total = cart.reduce((sum, item) =>
+        sum + item.price, 0
+    );
+
+    const method =
+        document.getElementById("paymentMethod").value;
+
+    const selectedBank =
+        document.getElementById("bankName").value;
+
+    const received = method === "Cash"
+        ? Number(document.getElementById("cashReceived").value)
+        : total;
+
+    const paymentError =
+        document.getElementById("paymentError");
+
+    paymentError.textContent = "";
+
+    if (
+        method === "Cash" &&
+        (!Number.isFinite(received) || received < total)
+    ) {
+
+        paymentError.textContent =
+            "Insufficient payment. Please enter the correct amount.";
+
+        return;
+
+    }
+
+    if (method === "Bank Transfer" && !selectedBank) {
+
+        paymentError.textContent =
+            "Please select a bank.";
+
+        return;
+
+    }
+
+    const summary = getCartSummary();
+
+    for (const item of summary) {
+
+        if (
+            !item.productRef ||
+            Number(item.productRef.stock) < item.quantity
+        ) {
+
+            paymentError.textContent =
+                "Not enough inventory for " + item.name;
+
+            return;
+
+        }
+
+    }
+
+    summary.forEach(item => {
+
+        item.productRef.stock =
+            Number(item.productRef.stock) - item.quantity;
+
+    });
+
+    saveInventory();
+
+    const now = new Date();
+
+    const receiptNumber =
+        "DB-" +
+        now.getFullYear() +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        String(now.getDate()).padStart(2, "0") +
+        "-" +
+        String(now.getTime()).slice(-6);
+
+    const change = method === "Cash"
+        ? received - total
+        : 0;
+
+    let paymentDetails = "";
+
+    if (method === "GCash" || method === "Maya") {
+        paymentDetails =
+            "Recipient Name: Russelle Jan M. Young | Recipient Number: 09152425919";
+    }
+
+    if (method === "Bank Transfer") {
+        paymentDetails = "Bank: " + selectedBank;
+    }
+
+    const sale = {
+
+        receiptNumber: receiptNumber,
+
+        date: now.toLocaleString("en-PH"),
+
+        items: summary.map(item => ({
+
+            name: item.name,
+            quantity: item.quantity,
+            unitPrice: item.price,
+            subtotal: item.price * item.quantity
+
+        })),
+
+        total: total,
+
+        paymentMethod: method,
+
+        paymentDetails: paymentDetails,
+
+        amountReceived: received,
+
+        change: change
+
+    };
+
+    const salesHistory =
+        JSON.parse(localStorage.getItem("salesHistory") || "[]");
+
+    salesHistory.push(sale);
+
+    localStorage.setItem(
+        "salesHistory",
+        JSON.stringify(salesHistory)
+    );
+
+    let totalSales =
+        Number(JSON.parse(localStorage.getItem("totalSales")) || 0);
+
+    totalSales += total;
+
+    localStorage.setItem(
+        "totalSales",
+        JSON.stringify(totalSales)
+    );
+
+    renderReceipt(sale);
+
+    cart = [];
+
+    updateCartCount();
+
+    document.getElementById("paymentModal").style.display = "none";
+
+    document.getElementById("receiptModal").style.display = "flex";
+
+    showAllProducts();
+
+}
+
+function renderReceipt(sale) {
+
+    const rows = sale.items.map(item => `
+
+        <tr>
+
+            <td>
+
+                ${item.name}
+
+                <br>
+
+                <small>
+                    ${item.quantity} × ${formatPeso(item.unitPrice)}
+                </small>
+
+            </td>
+
+            <td>${formatPeso(item.subtotal)}</td>
+
+        </tr>
+
+    `).join("");
+
+    document.getElementById("receiptContent").innerHTML = `
+
+        <div class="receipt-paper">
+
+            <div class="receipt-brand">
+
+                <h2>DRAGONBIKES INC.</h2>
+
+                <strong>SALES RECEIPT</strong>
+
+                <p>Thank you for your purchase!</p>
+
+            </div>
+
+            <div class="receipt-meta">
+
+                <div>
+                    <strong>Receipt No.:</strong>
+                    ${sale.receiptNumber}
+                </div>
+
+                <div>
+                    <strong>Date:</strong>
+                    ${sale.date}
+                </div>
+
+                <div>
+                    <strong>Payment Method:</strong>
+                    ${sale.paymentMethod}
+                </div>
+
+                ${sale.paymentDetails ? `
+
+                    <div>
+                        <strong>Payment Details:</strong>
+                        ${sale.paymentDetails}
+                    </div>
+
+                ` : ""}
+
+            </div>
+
+            <table class="receipt-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Product / Quantity</th>
+                        <th>Amount</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    ${rows}
+                </tbody>
+
+            </table>
+
+            <div class="receipt-totals">
+
+                <div class="payment-line">
+
+                    <span>Subtotal</span>
+
+                    <strong>${formatPeso(sale.total)}</strong>
+
+                </div>
+
+                <div class="payment-line">
+
+                    <strong>TOTAL PAID</strong>
+
+                    <strong>${formatPeso(sale.total)}</strong>
+
+                </div>
+
+                <div class="payment-line">
+
+                    <span>Amount Received</span>
+
+                    <strong>${formatPeso(sale.amountReceived)}</strong>
+
+                </div>
+
+                <div class="payment-line">
+
+                    <span>Change</span>
+
+                    <strong>${formatPeso(sale.change)}</strong>
+
+                </div>
+
+            </div>
+
+            <div class="receipt-thanks">
+
+                <strong>
+                    THANK YOU FOR CHOOSING DRAGONBIKES!
+                </strong>
+
+                <p>Please keep your receipt for your records.</p>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+function closePayment() {
+
+    document.getElementById("paymentModal").style.display = "none";
+
+}
+
+function closeReceipt() {
+
+    document.getElementById("receiptModal").style.display = "none";
+
+}
+
+document.getElementById("paymentModal")
+    .addEventListener("click", function(event) {
+
+        if (event.target === this) {
+            closePayment();
+        }
+
+    });
+
+document.getElementById("receiptModal")
+    .addEventListener("click", function(event) {
+
+        if (event.target === this) {
+            closeReceipt();
+        }
+
+    });
+
+saveInventory();
+
+showAllProducts();
+
+updateCartCount();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragonbikes - Dashboard</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+}
+
+.container {
+    width: 95%;
+    margin: 30px auto;
+    background: #fff;
+    border: 2px solid #000;
+    padding: 20px;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+}
+
+.logo img {
+    height: 50px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: red;
+    font-weight: bold;
+    margin: 0 15px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.menu a:hover {
+    background: red;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+}
+
+.menu a.active {
+    border: 2px solid #000;
+    padding: 8px 20px;
+    border-radius: 30px;
+    background: #eee;
+}
+
+h2 {
+    color: red;
+    margin-top: 25px;
+}
+
+.cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card {
+    flex: 1;
+    border: 2px solid #000;
+    border-radius: 30px;
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+}
+
+.card span {
+    color: red;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.status-ok {
+    color: green;
+}
+
+.status-low {
+    color: orange;
+}
+
+.status-critical {
+    color: red;
+}
+
+@media (max-width: 700px) {
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .menu a {
+        font-size: 15px;
+        margin: 0 5px;
+    }
+
+    .cards {
+        flex-wrap: wrap;
+    }
+
+    .card {
+        flex: 1 1 40%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+
+        <div class="logo">
+            <img src="logo 1.jpg" alt="Dragonbikes">
+        </div>
+
+        <div class="menu">
+            <a href="dashboard.html" class="active">HOME</a>
+            <a href="products.html">PRODUCT</a>
+            <a href="services.html">SERVICES</a>
+        </div>
+
+    </div>
+
+    <h2>DASHBOARD OVERVIEW</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <span>TOTAL SERVICES</span>
+            124
+        </div>
+
+        <div class="card">
+            <span>INVENTORY STATUS</span>
+            <strong id="inventoryStatus">LOADING...</strong>
+        </div>
+
+        <div class="card">
+            <span>LOW STOCK ALERTS</span>
+            <strong id="lowStockAlerts">0</strong>
+        </div>
+
+    </div>
+
+    <h2>INVENTORY STOCK SUMMARY</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <span>TOTAL MOTORCYCLE STOCK</span>
+            <strong id="motorcycleStock">0</strong>
+        </div>
+
+        <div class="card">
+            <span>TOTAL SPARE PART STOCK</span>
+            <strong id="spareStock">0</strong>
+        </div>
+
+        <div class="card">
+            <span>TOTAL INVENTORY STOCK</span>
+            <strong id="totalStock">0</strong>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function getInventoryData(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key)) || [];
+        return Array.isArray(data) ? data : [];
+    } catch (error) {
+        console.error("Inventory data error:", error);
+        return [];
+    }
+}
+
+function updateDashboard() {
+
+    const motorcycles = getInventoryData("motorcycleInventory");
+    const spares = getInventoryData("spareInventory");
+
+    const motorcycleTotal = motorcycles.reduce((total, item) => {
+        return total + Math.max(0, Number(item.stock) || 0);
+    }, 0);
+
+    const spareTotal = spares.reduce((total, item) => {
+        return total + Math.max(0, Number(item.stock) || 0);
+    }, 0);
+
+    const totalStock = motorcycleTotal + spareTotal;
+
+    const allItems = [...motorcycles, ...spares];
+
+    const lowStockItems = allItems.filter(item => {
+        return Number(item.stock) <= 2;
+    });
+
+    const criticalStock = allItems.some(item => {
+        return Number(item.stock) === 0;
+    });
+
+    document.getElementById("motorcycleStock").textContent =
+        motorcycleTotal;
+
+    document.getElementById("spareStock").textContent =
+        spareTotal;
+
+    document.getElementById("totalStock").textContent =
+        totalStock;
+
+    const inventoryStatus =
+        document.getElementById("inventoryStatus");
+
+    const lowStockAlerts =
+        document.getElementById("lowStockAlerts");
+
+    if (criticalStock) {
+
+        inventoryStatus.textContent = "CRITICAL";
+        inventoryStatus.className = "status-critical";
+
+    } else if (lowStockItems.length > 0) {
+
+        inventoryStatus.textContent = "LOW";
+        inventoryStatus.className = "status-low";
+
+    } else {
+
+        inventoryStatus.textContent = "OK";
+        inventoryStatus.className = "status-ok";
+
+    }
+
+    lowStockAlerts.textContent = lowStockItems.length;
+}
+
+updateDashboard();
+
+window.addEventListener("pageshow", updateDashboard);
+
+window.addEventListener("storage", function(event) {
+
+    if (
+        event.key === "motorcycleInventory" ||
+        event.key === "spareInventory" ||
+        event.key === null
+    ) {
+        updateDashboard();
+    }
+
+});
+
+document.addEventListener("visibilitychange", function() {
+
+    if (!document.hidden) {
+        updateDashboard();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
